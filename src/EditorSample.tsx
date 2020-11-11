@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Editor, EditorState, convertToRaw, Modifier, RichUtils, CompositeDecorator, ContentBlock, ContentState, getDefaultKeyBinding } from 'draft-js';
 import { Tag } from './Tag'
+import { blocks, decorator } from './RawContent';
 
 type Props = {};
 
 export const EditorSample: React.FC<Props> = (props) => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(EditorState.createWithContent(blocks, decorator));
   const editor = useRef<Editor>(null);
 
   const getColor = () => Math.floor(Math.random() * 255)
@@ -127,6 +128,7 @@ export const EditorSample: React.FC<Props> = (props) => {
           handleKeyCommand={handleKeyCommand}
           keyBindingFn={handleKeyBinding}
           blockStyleFn={blockStyleFn}
+          blockRendererFn={blockRenderer}
         />
       </div>
       <Tag label={"tag"} />
@@ -139,11 +141,16 @@ export const EditorSample: React.FC<Props> = (props) => {
 
 function blockStyleFn(contentBlock: ContentBlock) {
   const type = contentBlock.getType();
-  console.log('blockStyle', type)
+  // console.log('blockStyle', type)
   if (type === 'blockquote') {
     return 'superFancyBlockquote';
   }
   return '';
+}
+
+function blockRenderer(contentBlock: ContentBlock) {
+  const type = contentBlock.getType();
+  console.log('blocktype', type)
 }
 
 const styles = {
