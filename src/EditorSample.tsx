@@ -15,7 +15,10 @@ export const EditorSample: React.FC<Props> = (props) => {
   };
 
   const onChange = (editorState: EditorState) => {
-    setEditorState(editorState);
+    const isCompositionMode = editorState.isInCompositionMode();
+    if (!isCompositionMode) {
+      setEditorState(editorState);
+    }
   };
 
   const focusEditor = () => {
