@@ -65,9 +65,11 @@ const TokenSpan: React.FC<Props> = props => {
     props.contentState.getEntity(props.entityKey).getMutability()
   );
   return (
-    <span data-offset-key={props.offsetkey} style={style}>
-      {props.children}
-    </span>
+    <div style={style} contentEditable={false}>
+      <div data-offset-key={props.offsetkey} >
+        {props.children}
+      </div>
+    </div>
   );
 };
 
@@ -132,13 +134,16 @@ const styles = {
   immutable: {
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
     padding: '2px 0',
+    display: 'inline-flex',
   },
   mutable: {
     backgroundColor: 'rgba(204, 204, 255, 1.0)',
     padding: '2px 0',
+    display: 'inline-flex',
   },
   segmented: {
     backgroundColor: 'rgba(248, 222, 126, 1.0)',
     padding: '2px 0',
+    display: 'inline-flex',
   },
 };
