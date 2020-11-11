@@ -67,6 +67,7 @@ const TokenSpan: React.FC<Props> = props => {
   return (
     <div style={style} contentEditable={false}>
       <div data-offset-key={props.offsetkey} >
+        <span>💡</span>
         {props.children}
       </div>
     </div>
@@ -133,17 +134,20 @@ const styles = {
   },
   immutable: {
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    padding: '2px 0',
+    padding: '4px 8px',
     display: 'inline-flex',
+    borderRadius: '10px',
   },
   mutable: {
     backgroundColor: 'rgba(204, 204, 255, 1.0)',
-    padding: '2px 0',
+    padding: '4px 8px',
     display: 'inline-flex',
+    borderRadius: '10px',
   },
   segmented: {
     backgroundColor: 'rgba(248, 222, 126, 1.0)',
-    padding: '2px 0',
+    padding: '4px 8px',
     display: 'inline-flex',
+    borderRadius: '10px',
   },
 };

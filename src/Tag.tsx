@@ -1,11 +1,20 @@
 import React from "react";
 
-export const Tag: React.FC<{label: string}> = (props) => {
+type Props = {
+    label: string;
+    onClick: () => void;
+    style: any;
+}
+export const Tag: React.FC<Props> = (props) => {
+  const tagStyles = {
+    ...props.style,
+    ...styles.tag,
+  }
   return (
-    <div style={styles.tag}>
+    <div style={tagStyles} onClick={props.onClick} contentEditable={false}>
       <div style={styles.tagContainer}>
         <span>🎃</span>
-        <span style={styles.tagLabel}>{props.label}</span>
+        <span style={styles.tagLabel}>{props.children}</span>
       </div>
     </div>
   )
@@ -19,6 +28,8 @@ const styles = {
     width: '80px',
     height: '30px',
     positon: 'relative',
+    display: 'inline-flex',
+    margin: '0 8px',
   },
   tagContainer: {
     display: 'flex',
