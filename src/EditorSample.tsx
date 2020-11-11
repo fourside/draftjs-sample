@@ -104,12 +104,12 @@ export const EditorSample: React.FC<Props> = (props) => {
   EditorState.set(editorState, { decorator: compositeDecorator })
 
   const handleKeyBinding = (e: React.KeyboardEvent<{}>) => {
-    console.log('keyBindingFn', e.keyCode, e.key)
+    // console.log('keyBindingFn', e.keyCode, e.key)
     if (e.keyCode === 229) {
       return 'not-handled';
     }
     const defaultKeyBinding = getDefaultKeyBinding(e);
-    console.log("getDefault", defaultKeyBinding)
+    // console.log("getDefault", defaultKeyBinding)
     return defaultKeyBinding;
   }
 
@@ -126,6 +126,7 @@ export const EditorSample: React.FC<Props> = (props) => {
           onChange={onChange}
           handleKeyCommand={handleKeyCommand}
           keyBindingFn={handleKeyBinding}
+          blockStyleFn={blockStyleFn}
         />
       </div>
       <Tag label={"tag"} />
@@ -135,6 +136,15 @@ export const EditorSample: React.FC<Props> = (props) => {
     </div>
   );
 };
+
+function blockStyleFn(contentBlock: ContentBlock) {
+  const type = contentBlock.getType();
+  console.log('blockStyle', type)
+  if (type === 'blockquote') {
+    return 'superFancyBlockquote';
+  }
+  return '';
+}
 
 const styles = {
   container: {

@@ -11,3 +11,10 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
+.superFancyBlockquote {
+  color: #999;
+  font-family: "Hoefler Text", Georgia, serif;
+  font-style: italic;
+  text-align: center;
+}
