@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Editor, EditorState, convertToRaw, Modifier } from 'draft-js';
+import { Editor, EditorState, convertToRaw, Modifier, RichUtils } from 'draft-js';
 import { Tag } from './Tag'
 
 type Props = {};
@@ -35,20 +35,35 @@ export const EditorSample: React.FC<Props> = (props) => {
     const entity = contentState.createEntity('TAG', 'IMMUTABLE', { label: 'hoge' });
     const key = entity.getLastCreatedEntityKey();
     const modifiedEntity = Modifier.applyEntity(entity, selection, key);
-    const newEditorState = EditorState.set(editorState, {
-      currentContent: modifiedEntity
-    })
-    setEditorState(newEditorState)
+    const newEditorState = EditorState.push(editorState,
+      modifiedEntity,
+      'insert-characters'
+    )
+    setEditorState(newEditorState); // not work :cry:
   }
 
+  const handleKeyCommand = (command: string, editorState: EditorState, timestamp: number) => {
+    console.log(command, timestamp);
+    return 'not-handled' as const;
+  }
+
+  const handleBoldClick = () => {
+    const newEditorState = RichUtils.toggleInlineStyle(editorState, 'BOLD');
+    setEditorState(newEditorState);
+  }
+
+  console.log('render')
   return (
     <div style={styles.container}>
       <button style={styles.button} onClick={handleClick}>button</button>
+      {" "}
+      <button style={styles.button} onClick={handleBoldClick}>BOLD</button>
       <div style={editorStyle} onClick={focusEditor}>
         <Editor
           ref={editor}
           editorState={editorState}
           onChange={onChange}
+          handleKeyCommand={handleKeyCommand}
         />
       </div>
       <Tag label={"tag"} />
