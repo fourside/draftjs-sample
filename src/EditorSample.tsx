@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Editor, EditorState, convertToRaw, Modifier, RichUtils, CompositeDecorator, ContentBlock, ContentState } from 'draft-js';
+import { Editor, EditorState, convertToRaw, Modifier, RichUtils, CompositeDecorator, ContentBlock, ContentState, getDefaultKeyBinding } from 'draft-js';
 import { Tag } from './Tag'
 
 type Props = {};
@@ -46,7 +46,7 @@ export const EditorSample: React.FC<Props> = (props) => {
   }
 
   const handleKeyCommand = (command: string, editorState: EditorState, timestamp: number) => {
-    console.log(command, timestamp);
+    // console.log(command, timestamp);
     return 'not-handled' as const;
   }
 
@@ -103,6 +103,16 @@ export const EditorSample: React.FC<Props> = (props) => {
   ]);
   EditorState.set(editorState, { decorator: compositeDecorator })
 
+  const handleKeyBinding = (e: React.KeyboardEvent<{}>) => {
+    console.log('keyBindingFn', e.keyCode, e.key)
+    if (e.keyCode === 229) {
+      return 'not-handled';
+    }
+    const defaultKeyBinding = getDefaultKeyBinding(e);
+    console.log("getDefault", defaultKeyBinding)
+    return defaultKeyBinding;
+  }
+
   console.log('render')
   return (
     <div style={styles.container}>
@@ -115,6 +125,7 @@ export const EditorSample: React.FC<Props> = (props) => {
           editorState={editorState}
           onChange={onChange}
           handleKeyCommand={handleKeyCommand}
+          keyBindingFn={handleKeyBinding}
         />
       </div>
       <Tag label={"tag"} />
