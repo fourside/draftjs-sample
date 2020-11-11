@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Editor, EditorState, convertToRaw } from 'draft-js';
+import { Editor, EditorState, convertToRaw, Modifier } from 'draft-js';
 import { Tag } from './Tag'
 
 type Props = {};
@@ -7,6 +7,12 @@ type Props = {};
 export const EditorSample: React.FC<Props> = (props) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const editor = useRef<Editor>(null);
+
+  const getColor = () => Math.floor(Math.random() * 255)
+  const editorStyle = {
+    ...styles.editor,
+    color: `rgb(${getColor()},${getColor()},${getColor()})`,
+  };
 
   const onChange = (editorState: EditorState) => {
     setEditorState(editorState);
@@ -24,12 +30,21 @@ export const EditorSample: React.FC<Props> = (props) => {
 
   const handleClick = () => {
     console.log("hoge")
+    const contentState = editorState.getCurrentContent();
+    const selection = editorState.getSelection();
+    const entity = contentState.createEntity('TAG', 'IMMUTABLE', { label: 'hoge' });
+    const key = entity.getLastCreatedEntityKey();
+    const modifiedEntity = Modifier.applyEntity(entity, selection, key);
+    const newEditorState = EditorState.set(editorState, {
+      currentContent: modifiedEntity
+    })
+    setEditorState(newEditorState)
   }
 
   return (
     <div style={styles.container}>
       <button style={styles.button} onClick={handleClick}>button</button>
-      <div style={styles.editor} onClick={focusEditor}>
+      <div style={editorStyle} onClick={focusEditor}>
         <Editor
           ref={editor}
           editorState={editorState}
