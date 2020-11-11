@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Editor, EditorState, convertToRaw, Modifier, RichUtils } from 'draft-js';
+import { Editor, EditorState, convertToRaw, Modifier, RichUtils, CompositeDecorator, ContentBlock, ContentState } from 'draft-js';
 import { Tag } from './Tag'
 
 type Props = {};
@@ -51,6 +51,54 @@ export const EditorSample: React.FC<Props> = (props) => {
     const newEditorState = RichUtils.toggleInlineStyle(editorState, 'BOLD');
     setEditorState(newEditorState);
   }
+
+  const HANDLE_REGEX = /@[\w]+/g;
+  const HASHTAG_REGEX = /#[\w\u0590-\u05ff]+/g;
+
+  function handleStrategy(contentBlock: ContentBlock, callback: Function, contentState: ContentState) {
+    findWithRegex(HANDLE_REGEX, contentBlock, callback);
+  }
+
+  function hashtagStrategy(contentBlock: ContentBlock, callback: Function, contentState: unknown) {
+    findWithRegex(HASHTAG_REGEX, contentBlock, callback);
+  }
+
+  function findWithRegex(regex: RegExp, contentBlock: ContentBlock, callback: Function) {
+    const text = contentBlock.getText();
+    let matchArr, start;
+    while ((matchArr = regex.exec(text)) !== null) {
+      start = matchArr.index;
+      callback(start, start + matchArr[0].length);
+    }
+  }
+
+  const HandleSpan: React.FC<{}> = props => {
+    return (
+      <span {...props}>
+        {props.children}
+      </span>
+    );
+  };
+
+  const HashtagSpan: React.FC<{}> = props => {
+    return (
+      <span {...props}>
+        {props.children}
+      </span>
+    );
+  };
+
+  const compositeDecorator = new CompositeDecorator([
+    {
+      strategy: handleStrategy,
+      component: HandleSpan,
+    },
+    {
+      strategy: hashtagStrategy,
+      component: HashtagSpan,
+    },
+  ]);
+  EditorState.set(editorState, { decorator: compositeDecorator })
 
   console.log('render')
   return (
