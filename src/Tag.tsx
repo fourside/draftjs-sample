@@ -29,14 +29,17 @@ const styles = {
     height: '30px',
     positon: 'relative',
     display: 'inline-flex',
+    justifyContent: 'center',
     margin: '0 8px',
   },
   tagContainer: {
     display: 'flex',
     positon: 'absolute',
+    marginTop: '1px',
   },
   tagLabel: {
     margin: '0',
+    marginLeft: '2px',
     fontWeight: 'bold' as const,
   }
 }
