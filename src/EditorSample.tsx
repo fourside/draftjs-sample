@@ -58,6 +58,22 @@ export const EditorSample: React.FC<Props> = (props) => {
     return defaultKeyBinding;
   }
 
+  const getFocusLog = () => {
+    const selection = editorState.getSelection()
+    const focuses = [
+`forcusOffset: ${selection.getFocusOffset()}`,
+`anchorOffset: ${selection.getAnchorOffset()}`,
+`startOffset: ${selection.getStartOffset()}`,
+`endOffset: ${selection.getEndOffset()}`,
+    ];
+    const log = focuses.join("\n");
+    return (
+      <>
+        {log}
+      </>
+    )
+  }
+
   // console.log('render')
   return (
     <div style={styles.container}>
@@ -77,9 +93,14 @@ export const EditorSample: React.FC<Props> = (props) => {
           blockRendererFn={blockRenderer}
         />
       </div>
-      <pre style={styles.console}>
-        {JSON.stringify(convertToRaw(editorState.getCurrentContent()), null, '  ')}
-      </pre>
+      <div style={styles.console}>
+        <pre className="consoleColumn">
+          {JSON.stringify(convertToRaw(editorState.getCurrentContent()), null, '  ')}
+        </pre>
+        <pre>
+          {getFocusLog()}
+        </pre>
+      </div>
     </div>
   );
 };
@@ -113,6 +134,7 @@ const styles = {
   console: {
     maxHeight: '200px',
     overflowY: 'scroll' as const,
+    display: 'flex',
   },
   tag: {
     cursor: 'pointer',

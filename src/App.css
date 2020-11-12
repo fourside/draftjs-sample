@@ -18,3 +18,8 @@
   font-style: italic;
   text-align: center;
 }
+
+.consoleColumn {
+  width: 50%;
+  margin: 1em 1em;
+}
