@@ -49,10 +49,10 @@ export const EditorSample: React.FC<Props> = (props) => {
   }
 
   const handleKeyBinding = (e: React.KeyboardEvent<{}>) => {
-    // console.log('keyBindingFn', e.keyCode, e.key)
-    if (e.keyCode === 229) {
-      return 'not-handled';
-    }
+    // console.log('keyBindingFn', e.keyCode, e.key, e.timeStamp)
+    // if (e.keyCode === 229) {
+    //   return 'not-handled';
+    // }
     const defaultKeyBinding = getDefaultKeyBinding(e);
     // console.log("getDefault", defaultKeyBinding)
     return defaultKeyBinding;
@@ -65,6 +65,8 @@ export const EditorSample: React.FC<Props> = (props) => {
 `anchorOffset: ${selection.getAnchorOffset()}`,
 `startOffset: ${selection.getStartOffset()}`,
 `endOffset: ${selection.getEndOffset()}`,
+`forcusKey: ${selection.getFocusKey()}`,
+`anchorKey: ${selection.getAnchorKey()}`,
     ];
     const log = focuses.join("\n");
     return (
@@ -72,6 +74,11 @@ export const EditorSample: React.FC<Props> = (props) => {
         {log}
       </>
     )
+  }
+
+  const handleReturn = (e: React.KeyboardEvent<{}>, editorState: EditorState) => {
+    // console.log('handleReturn')
+    return 'handled' as const;
   }
 
   // console.log('render')
@@ -91,6 +98,7 @@ export const EditorSample: React.FC<Props> = (props) => {
           keyBindingFn={handleKeyBinding}
           blockStyleFn={blockStyleFn}
           blockRendererFn={blockRenderer}
+          handleReturn={handleReturn}
         />
       </div>
       <div style={styles.console}>
