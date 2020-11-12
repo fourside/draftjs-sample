@@ -16,10 +16,17 @@ export const EditorSample: React.FC<Props> = (props) => {
     color: `rgb(${getColor()},${getColor()},${getColor()})`,
   };
 
-  const onChange = (editorState: EditorState) => {
-    const isCompositionMode = editorState.isInCompositionMode();
+  const onChange = (newEditorState: EditorState) => {
+    const beforeText = editorState.getCurrentContent().getLastBlock().getText()
+    const afterText = newEditorState.getCurrentContent().getLastBlock().getText()
+    if (beforeText !== afterText) {
+      console.log("before", beforeText)
+      console.log("after", afterText)
+      console.log("-----")
+    }
+    const isCompositionMode = newEditorState.isInCompositionMode();
     if (!isCompositionMode) {
-      setEditorState(editorState);
+      setEditorState(newEditorState);
     }
   };
 
@@ -78,12 +85,12 @@ export const EditorSample: React.FC<Props> = (props) => {
 
   const handleReturn = (e: React.KeyboardEvent<{}>, editorState: EditorState) => {
     // console.log('handleReturn')
-    return 'handled' as const;
+    return 'not-handled' as const;
   }
 
   const handleBeforeInput = (chars: string, editorState: EditorState, eventTimeStamp: number) => {
     // not work by IME input
-    console.log("handleBeforeInput", chars);
+    // console.log("handleBeforeInput", chars);
     return 'not-handled' as const;
   }
 
