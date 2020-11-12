@@ -15,7 +15,7 @@ function getEntityStrategy() {
         const entityKey = character.getEntity();
         return !!entityKey;
       },
-      callback
+      (start, end) => callback(start, end -1)
     );
   };
 }
@@ -26,11 +26,13 @@ export function insertEntity(editorState: EditorState): EditorState {
   const entity = contentState.createEntity('TAG', 'IMMUTABLE', { label: 'hoge' });
   const key = entity.getLastCreatedEntityKey();
 
-  // const text = `hoge\u200b`; // not work
-  const text = `hoge`;
+  const text = `hoge\u200b`;
   const newContentState = Modifier.insertText(contentState, selection, text, undefined, key)
-  return EditorState.push(editorState,
+  let newEditorState = EditorState.push(editorState,
     newContentState,
     'insert-characters'
   );
+  newEditorState = EditorState.moveFocusToEnd(newEditorState);
+  newEditorState = EditorState.forceSelection(newEditorState, newContentState.getSelectionAfter())
+  return newEditorState;
 }
