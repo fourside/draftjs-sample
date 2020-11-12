@@ -81,6 +81,12 @@ export const EditorSample: React.FC<Props> = (props) => {
     return 'handled' as const;
   }
 
+  const handleBeforeInput = (chars: string, editorState: EditorState, eventTimeStamp: number) => {
+    // not work by IME input
+    console.log("handleBeforeInput", chars);
+    return 'not-handled' as const;
+  }
+
   // console.log('render')
   return (
     <div style={styles.container}>
@@ -99,6 +105,7 @@ export const EditorSample: React.FC<Props> = (props) => {
           blockStyleFn={blockStyleFn}
           blockRendererFn={blockRenderer}
           handleReturn={handleReturn}
+          handleBeforeInput={handleBeforeInput}
         />
       </div>
       <div style={styles.console}>
