@@ -61,20 +61,12 @@ export const EditorSample: React.FC<Props> = (props) => {
   }
 
   const handleKeyBinding = (e: React.KeyboardEvent<{}>) => {
-    // console.log('keyBindingFn', e.keyCode, e.key, e.timeStamp)
-    if (e.key === 'ArrowLeft' && isZeroWidthSpace(editorState, e.key)) {
-      const newEditorState = jumpCursor(editorState, e.key);
-      if (newEditorState) {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      if (isZeroWidthSpace(editorState, e.key)) {
+        const newEditorState = jumpCursor(editorState, e.key);
         setEditorState(newEditorState);
+        return customCommands.jumpCusor;
       }
-      return customCommands.jumpCusor;
-    }
-    if (e.key === 'ArrowRight' && isZeroWidthSpace(editorState, e.key)) {
-      const newEditorState = jumpCursor(editorState, e.key);
-      if (newEditorState) {
-        setEditorState(newEditorState);
-      }
-      return customCommands.jumpCusor;
     }
     // if (e.keyCode === 229) {
     //   return 'not-handled';
