@@ -1,5 +1,5 @@
 import { CompositeDecorator, ContentBlock, ContentState, EditorState, Modifier } from "draft-js";
-import { Tag } from "./Tag";
+import { Tag } from "../components/Tag";
 
 export const decorator = new CompositeDecorator([
   {

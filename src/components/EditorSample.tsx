@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Editor, EditorState, convertToRaw, RichUtils, ContentBlock, getDefaultKeyBinding } from 'draft-js';
 import { Tag } from './Tag'
-import { decorator, insertEntity } from './Decorator';
-import { isZeroWidthSpace, jumpCursor } from "./Cursor";
-import { customCommands, isHandleCommand } from "./CustomCommand";
+import { decorator, insertEntity } from '../draftjs/Decorator';
+import { isZeroWidthSpace, jumpCursor } from "../draftjs/Cursor";
+import { customCommands, isHandleCommand } from "../draftjs/CustomCommand";
 
 type Props = {};
 
