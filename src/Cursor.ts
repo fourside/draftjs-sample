@@ -26,22 +26,11 @@ const nextOffset = (currentOffset: number, direction: CursorDirection, text: str
     return Math.min(toBeOffset, text.length);
 }
 
-export const jumpCursor = (editorState: EditorState, entityRanges: [number, number][], direction: CursorDirection) => {
+export const jumpCursor = (editorState: EditorState, direction: CursorDirection) => {
     const selection = editorState.getSelection();
     const anchorKey = selection.getAnchorKey();
     const anchorOffset = selection.getAnchorOffset();
     const focusKey = selection.getFocusKey();
-
-    const content = editorState.getCurrentContent().getBlockForKey(selection.getAnchorKey());
-    const text = content.getText();
-
-    const toBeOffset = nextOffset(anchorOffset, direction, text)
-    const range = entityRanges.find(ranges => {
-        return ranges[0] <= toBeOffset && toBeOffset <= ranges[1]
-    });
-    if (!range) {
-        return;
-    }
 
     const destOffset = direction === 'ArrowRight' ? anchorOffset + 2: anchorOffset - 2;
     const newSelection = selection.merge({

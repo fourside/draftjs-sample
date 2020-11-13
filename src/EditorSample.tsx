@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Editor, EditorState, convertToRaw, RichUtils, ContentBlock, getDefaultKeyBinding, CharacterMetadata } from 'draft-js';
+import { Editor, EditorState, convertToRaw, RichUtils, ContentBlock, getDefaultKeyBinding } from 'draft-js';
 import { Tag } from './Tag'
 import { decorator, insertEntity } from './Decorator';
 import { isZeroWidthSpace, jumpCursor } from "./Cursor";
@@ -10,7 +10,6 @@ type Props = {};
 export const EditorSample: React.FC<Props> = (props) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty(decorator));
   const editor = useRef<Editor>(null);
-  const entityRanges = useRef<[number, number][]>([[0, 0]]);
 
   // const getColor = () => Math.floor(Math.random() * 255)
   const getColor = () => 0
@@ -27,7 +26,6 @@ export const EditorSample: React.FC<Props> = (props) => {
       // console.log("after", afterText)
       // console.log("-----")
     }
-    updateEntityRanges(newEditorState);
     const isCompositionMode = newEditorState.isInCompositionMode();
     if (!isCompositionMode) {
       setEditorState(newEditorState);
@@ -65,15 +63,14 @@ export const EditorSample: React.FC<Props> = (props) => {
   const handleKeyBinding = (e: React.KeyboardEvent<{}>) => {
     // console.log('keyBindingFn', e.keyCode, e.key, e.timeStamp)
     if (e.key === 'ArrowLeft' && isZeroWidthSpace(editorState, e.key)) {
-      console.log("fire by arrow left")
-      const newEditorState = jumpCursor(editorState, entityRanges.current, e.key);
+      const newEditorState = jumpCursor(editorState, e.key);
       if (newEditorState) {
         setEditorState(newEditorState);
       }
       return customCommands.jumpCusor;
     }
     if (e.key === 'ArrowRight' && isZeroWidthSpace(editorState, e.key)) {
-      const newEditorState = jumpCursor(editorState, entityRanges.current, e.key);
+      const newEditorState = jumpCursor(editorState, e.key);
       if (newEditorState) {
         setEditorState(newEditorState);
       }
@@ -114,19 +111,6 @@ export const EditorSample: React.FC<Props> = (props) => {
     // not work by IME input
     // console.log("handleBeforeInput", chars);
     return 'not-handled' as const;
-  }
-
-  const updateEntityRanges = (editorState: EditorState) => {
-    entityRanges.current = [];
-    const block = editorState.getCurrentContent().getLastBlock();
-      block.findEntityRanges(
-        (value: CharacterMetadata) => {
-          return !!value.getEntity()
-        },
-        (start, end) => {
-          entityRanges.current.push([start, end]);
-        }
-      );
   }
 
   // console.log('render')
