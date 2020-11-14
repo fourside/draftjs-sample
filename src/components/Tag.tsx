@@ -13,7 +13,7 @@ export const Tag: React.FC<Props> = (props) => {
   return (
     <div style={tagStyles} onClick={props.onClick} contentEditable={false}>
       <div style={styles.tagContainer}>
-        <span>🎃</span>
+        <span role="img" aria-label={"pumpkin"}>🎃</span>
         <span style={styles.tagLabel}>{props.children}</span>
       </div>
     </div>
